@@ -1,12 +1,11 @@
 <template>
   <div class="container">
     <v-list class="list">
-        <p class="subhead">Prev</p>
+        <p class="subhead">Precedes</p>
         <v-list-tile
           v-for="figure in precedingFigures"
           :key="figure.title"
           avatar
-          @click=""
         >
           <v-list-tile-action>
             <v-icon v-if="figure.icon" color="brown">star</v-icon>
@@ -19,12 +18,11 @@
         </v-list-tile>
       </v-list>
       <v-list class="list">
-             <p class="subhead">Next</p>
+             <p class="subhead">Follows</p>
           <v-list-tile
             v-for="figure in precedingFigures"
             :key="figure.title"
             avatar
-            @click=""
           >
             <v-list-tile-action>
               <v-icon v-if="figure.icon" color="brown">star</v-icon>
@@ -38,7 +36,6 @@
         </v-list>
   </div>
 
-  </div>
 </template>
 
 <script>

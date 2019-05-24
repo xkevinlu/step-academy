@@ -1,9 +1,44 @@
 <template>
   <v-app>
-      <v-toolbar app dark color="primary">
-          <v-toolbar-side-icon></v-toolbar-side-icon>
+    <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary
+      >
+        <v-list class="pa-1">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg">
+            </v-list-tile-avatar>
 
-          <v-toolbar-title class="white--text">{{currentDance}} - {{ currentFigure }}</v-toolbar-title>
+            <v-list-tile-content>
+              <v-list-tile-title>Ajay Phatak</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+
+          <v-list-tile
+            v-for="item in dances"
+            :key="item.title"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+
+      <v-toolbar app dark color="primary">
+          <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
+
+          <v-toolbar-title class="white--text">{{currentDance}}</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
@@ -29,10 +64,13 @@
         </v-toolbar>
 
     <v-content>
+      <router-link to="/foo">Go to Foo</router-link>
+<router-link to="/bar">Go to Bar</router-link>
+      <router-view></router-view>
       <Player
         :rotation="cameraRotation"
         :zoom="zoom"
-        :instruction="currentInstruction"
+        :instruction="currentFigure"
         :count="currentCount"
         :figure="waltz.newcomer.figures.RFChangeStep"
       />
@@ -71,6 +109,14 @@ export default {
   },
   data () {
     return {
+      drawer: null,
+      dances: [
+        {title: 'Waltz'},
+        {title: 'Tango'},
+        {title: 'Viennese Waltz'},
+        {title: 'Foxtrot'},
+        {title: 'Quickstep'},
+      ],
       current:0,
       cameraRotation:0,
       zoom:1,

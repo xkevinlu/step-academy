@@ -4,23 +4,28 @@
     <div class="perspective" :style="{ transform: `rotate(${rotation}deg) scale(${zoom})`}">
       <div class="contents">
         <div class="footarea ml" :style="mlStyle">
-          <div v-show='manOn' class="foot man">ml</div>
+          <div v-show='man' class="foot man">ml</div>
         </div>
           <div class="footarea mr" :style="mrStyle">
-        <div v-show='manOn' class="foot man">mr</div>
+        <div v-show='man' class="foot man">mr</div>
         </div>
           <div class="footarea ll" :style="llStyle">
-        <div v-show='ladyOn' class="foot lady">ll</div>
+        <div v-show='lady' class="foot lady">ll</div>
         </div>
           <div class="footarea lr" :style="lrStyle">
-        <div v-show='ladyOn' class="foot lady">lr</div>
+        <div v-show='lady' class="foot lady">lr</div>
         </div>
       </div>
     </div>
   </div>
   <div class="controls">
+    <v-slider class="slider"
+      ticks
+      :max="maxStep"
+      v-model="step"
+    ></v-slider>
     <div class="instruction">
-      <h1 class="title">{{instruction}}</h1>
+      <h5 class="headline">{{instruction}}</h5>
     </div>
     <div class="seek">
       <v-btn icon @click="step--" :disabled="step < 1">
@@ -29,41 +34,25 @@
       </v-btn>
 
       <v-btn icon>
-        <i class="control fas fa-play large" @click="play()"></i>
+        <i class="fas fa-play large" @click="play()"></i>
       </v-btn>
 
       <v-btn icon @click="step++" :disabled="step >= maxStep">
         <i class="control fas fa-forward"></i>
       </v-btn>
-      <v-slider class="slider"
-        ticks
-        :max="maxStep"
-        v-model="step"
-      ></v-slider>
     </div>
-
     <div class="container">
-
-      <v-btn icon
-        @click="setManOn()"
-        :class="{blue: !ladyOn}"
-      >
-        <i class="control fas fa-male"></i>
+      <v-btn icon @click="setManOn" >
+        <v-icon :color="!lady ? 'blue' : ''">fa-male</v-icon>
       </v-btn>
 
-      <v-btn icon
-        @click="setLadyOn()"
-        :class="{pink: !manOn}"
-      >
-        <i class="control fas fa-female"></i>
+      <v-btn icon @click="setLadyOn">
+        <v-icon :color="!man ? 'red' : ''">fa-female</v-icon>
       </v-btn>
 
 
-      <v-btn icon
-        @click="setBothOn()"
-        :class="{purple : (ladyOn && manOn)}"
-      >
-        <v-icon>wc</v-icon>
+      <v-btn icon @click="setBothOn()">
+        <v-icon :color="man && lady ? 'purple' : ''">wc</v-icon>
       </v-btn>
     </div>
 
@@ -89,27 +78,26 @@ export default {
 
     },
     setManOn() {
-      this.manOn = true;
-      this.ladyOn = false;
+      this.man = true;
+      this.lady = false;
     },
     setLadyOn() {
-      this.manOn = false;
-      this.ladyOn = true;
+      this.man = false;
+      this.lady = true;
     },
     setBothOn() {
-      this.manOn = true;
-      this.ladyOn = true;
+      this.man = true;
+      this.lady = true;
     }
   },
   watch: {
-    step: function () {
-      console.log(this.step);
-    }
+    //
   },
   data() {
     return {
-      manOn: true,
-      ladyOn: true,
+      man: true,
+      lady: true,
+      colorMan: 'blue',
       step:0,
     }
   },
@@ -122,32 +110,44 @@ export default {
       let x = (ml.changeX != undefined) ? ml.changeX : 0;
       let y = (ml.changeY != undefined) ? ml.changeY : 0;
       let turn = (ml.changeRotation != undefined) ? ml.changeRotation : 0;
-      let opacity = (ml.opacity != undefined) ? ml.opacity : 0;
-      return {transform: `translate(${x}px, ${y}px) rotate(${turn})`};
+      let opacity = (ml.opacity != undefined) ? ml.opacity : 1;
+      return {
+        transform: `translate(${x}px, ${y}px) rotate(${turn})`,
+        opacity: `${opacity}`
+      };
     },
     mrStyle() {
       let mr = this.figure.steps[this.step].mr;
       let x = (mr.changeX != undefined) ? mr.changeX : 0;
       let y = (mr.changeY != undefined) ? mr.changeY : 0;
       let turn = (mr.changeRotation != undefined) ? mr.changeRotation : 0;
-      let opacity = (mr.opacity != undefined) ? mr.opacity : 0;
-      return {transform: `translate(${x}px, ${y}px) rotate(${turn})`};
+      let opacity = (mr.opacity != undefined) ? mr.opacity : 1;
+      return {
+        transform: `translate(${x}px, ${y}px) rotate(${turn})`,
+        opacity: `${opacity}`
+      };
     },
     llStyle() {
       let ll = this.figure.steps[this.step].ll;
       let x = (ll.changeX != undefined) ? ll.changeX : 0;
       let y = (ll.changeY != undefined) ? ll.changeY : 0;
       let turn = (ll.changeRotation != undefined) ? ll.changeRotation : 0;
-      let opacity = (ll.opacity != undefined) ? ll.opacity : 0;
-      return {transform: `translate(${x}px, ${y}px) rotate(${turn})`};
+      let opacity = (ll.opacity != undefined) ? ll.opacity : 1;
+      return {
+        transform: `translate(${x}px, ${y}px) rotate(${turn})`,
+        opacity: `${opacity}`
+      };
     },
     lrStyle() {
       let lr = this.figure.steps[this.step].lr;
       let x = (lr.changeX != undefined) ? lr.changeX : 0;
       let y = (lr.changeY != undefined) ? lr.changeY : 0;
       let turn = (lr.changeRotation != undefined) ? lr.changeRotation : 0;
-      let opacity = (lr.opacity != undefined) ? lr.opacity : 0;
-      return {transform: `translate(${x}px, ${y}px) rotate(${turn})`};
+      let opacity = (lr.opacity != undefined) ? lr.opacity : 1;
+      return {
+        transform: `translate(${x}px, ${y}px) rotate(${turn})`,
+        opacity: `${opacity}`
+      };
     },
   }
 }
@@ -177,11 +177,13 @@ export default {
 
 .instruction {
   padding:16px;
+  text-align:center;
+  font-size:32px;
 }
 .controls {
   width:100%;
   background-color:#E5E5E5;
-  border:1px solid black;
+  border:1px solid gray;
 }
 
 .container {
@@ -190,19 +192,21 @@ export default {
   justify-content:center;
 }
 .slider {
-  padding:8px 24px 0px 24px;
+  margin-top:-17px;
+  margin-bottom:0px;
+  height:20px;
 }
 
 .seek {
   width:100%;
   height:80px;
   display:flex;
-  justify-content:center;
+  justify-content:space-around;
   align-items:center;
 }
 
 .large {
-  font-size:1.8em;
+  font-size:2.5em;
 }
 
 .control {
@@ -211,9 +215,7 @@ export default {
 .player {
   width:100%;
   height:400px;
-  border:1px solid black;
   position:relative;
-  /* background-color:green; */
 }
 
 .footarea {
