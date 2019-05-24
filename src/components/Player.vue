@@ -1,5 +1,33 @@
 <template>
   <div>
+    <div class="top-controls">
+        <v-btn icon @click="rotation -= 45">
+          <v-icon>rotate_left</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="rotation += 45">
+          <v-icon>rotate_right</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="zoom -= 0.10">
+          <v-icon>zoom_out</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="zoom += 0.10">
+          <v-icon>zoom_in</v-icon>
+        </v-btn>
+        <v-btn icon @click="setManOn" >
+          <v-icon :color="!lady ? 'blue' : ''">fa-male</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="setLadyOn">
+          <v-icon :color="!man ? 'red' : ''">fa-female</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="setBothOn">
+          <v-icon :color="man && lady ? 'purple' : ''">wc</v-icon>
+        </v-btn>
+    </div>
   <div class="player">
     <div class="perspective" :style="{ transform: `rotate(${rotation}deg) scale(${zoom})`}">
       <div class="contents">
@@ -41,20 +69,6 @@
         <i class="control fas fa-forward"></i>
       </v-btn>
     </div>
-    <div class="container">
-      <v-btn icon @click="setManOn" >
-        <v-icon :color="!lady ? 'blue' : ''">fa-male</v-icon>
-      </v-btn>
-
-      <v-btn icon @click="setLadyOn">
-        <v-icon :color="!man ? 'red' : ''">fa-female</v-icon>
-      </v-btn>
-
-
-      <v-btn icon @click="setBothOn()">
-        <v-icon :color="man && lady ? 'purple' : ''">wc</v-icon>
-      </v-btn>
-    </div>
 
   </div>
 </div>
@@ -67,16 +81,20 @@ export default {
   props: {
     head: String,
     subhead: String,
-    rotation: Number,
-    zoom: Number,
     instruction: String,
     count: Number,
     figure: Object,
   },
+  watch: {
+    zoom: function() {
+      if ( this.zoom < 0.5 ) {
+        this.zoom = 0.5;
+      } else if (this.zoom > 1.5) {
+        this.zoom = 1.5;
+      }
+    }
+  },
   methods: {
-    async play() {
-
-    },
     setManOn() {
       this.man = true;
       this.lady = false;
@@ -90,14 +108,12 @@ export default {
       this.lady = true;
     }
   },
-  watch: {
-    //
-  },
   data() {
     return {
+      rotation:0,
+      zoom:1,
       man: true,
       lady: true,
-      colorMan: 'blue',
       step:0,
     }
   },
@@ -157,15 +173,18 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.contents {
-  position:relative;
-  height:360px;
-  width:360px;
-  border:1px dotted gray;
-  margin-top:24px;
-  margin-left:auto;
-  margin-right:auto;
+.top-controls {
+  display:flex;
+  justify-content:space-around;
+  margin-bottom:30px;
 }
+.controls {
+  width:100%;
+  height:200px;
+  background-color:#E5E5E5;
+  border:1px solid gray;
+}
+
 
 .blue {
   color:blue;
@@ -180,17 +199,7 @@ export default {
   text-align:center;
   font-size:32px;
 }
-.controls {
-  width:100%;
-  background-color:#E5E5E5;
-  border:1px solid gray;
-}
 
-.container {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
 .slider {
   margin-top:-17px;
   margin-bottom:0px;
@@ -212,16 +221,28 @@ export default {
 .control {
   font-size:1.4em;
 }
+
 .player {
   width:100%;
   height:400px;
   position:relative;
+  overflow:hidden;
+  overflow-x:scroll;
+}
+.contents {
+  position:relative;
+  height:360px;
+  width:360px;
+  /* border:1px dotted gray; */
+  margin-top:24px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .footarea {
   width:100px;
   height:100px;
-  border:1px solid red;
+  /* border:1px solid red; */
   display:flex;
   align-items:center;
   justify-content:center;

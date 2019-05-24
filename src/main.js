@@ -3,7 +3,7 @@ import './plugins/vuetify'
 import App from './App.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-import Controls from './components/Controls.vue'
+import Waltz from './Waltz.vue'
 import Player from './components/NextPrevFigures.vue'
 //
 Vue.use(VueRouter)
@@ -14,7 +14,7 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = false
 
 const routes = [
-  { path: '/foo', component: Controls },
+  { path: '/waltz', component: Waltz },
   { path: '/bar', component: Player }
 ]
 
